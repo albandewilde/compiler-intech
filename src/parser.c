@@ -22,15 +22,41 @@ extern ast_t **past;
  */
 ast_t *parse_function (buffer_t *buffer)
 {
-  // TODO
-  char *name = NULL;
-  
-  // ast_list_t *params = parse_parameters(buffer);
-  // int return_type = parse_return_type(buffer);
-  // ast_list_t *stmts = parse_function_body(buffer);
+    // TODO
+    char *name = NULL;
 
-  // return ast_new_function(name, return_type, params, stmts);
-  return NULL;
+    // Get the fonction key word
+    char func_kw[] = "fonction ";
+    for (int idx = 0; idx < 9; idx += 1) {
+        if (func_kw[idx] == buf_getchar(buffer)) {
+            continue;
+        } else {
+            exit(1);
+        }
+    }
+
+    // Get the function name (not realy good solution)
+    // Find the size of the function name
+    int func_name_size = 0;
+    char chr = '?';
+    while (chr != ' ' && chr != '(') {
+        func_name_size += 1;
+        chr = buf_getchar(buffer);
+    }
+    buf_rollback(buffer, func_name_size);
+
+    // Register the function name
+    char func_name[func_name_size];
+    for (int idx = 0; idx < func_name_size; idx += 1) {
+        func_name[idx] = buf_getchar(buffer);
+    }
+
+    // ast_list_t *params = parse_parameters(buffer);
+    // int return_type = parse_return_type(buffer);
+    // ast_list_t *stmts = parse_function_body(buffer);
+
+    // return ast_new_function(name, return_type, params, stmts);
+    return NULL;
 }
 
 /**
@@ -38,9 +64,9 @@ ast_t *parse_function (buffer_t *buffer)
  */
 ast_list_t *parse (buffer_t *buffer)
 {
-  ast_t *function = parse_function(buffer);
-  ast_print(function);
+    ast_t *function = parse_function(buffer);
+    ast_print(function);
 
-  if (DEBUG) printf("** end of file. **\n");
-  return NULL;
+    if (DEBUG) printf("** end of file. **\n");
+    return NULL;
 }
