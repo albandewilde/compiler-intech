@@ -245,23 +245,40 @@ ast_list_t *parse_function_body(buffer_t *buffer, symbol_t **table)
  */
 ast_t *parse_function(buffer_t *buffer, symbol_t **table)
 {
-  buf_skipblank(buffer);
-  char *lexem = lexer_getalphanum(buffer);
-  if (strcmp(lexem, "fonction") != 0)
-  {
-    printf("Expected a 'fonction' keyword on global scope.exiting.\n");
-    buf_print(buffer);
-    exit(1);
-  }
-  buf_skipblank(buffer);
-  // TODO
-  char *name = lexer_getalphanum(buffer);
+    char *name = NULL;
 
-  ast_list_t *params = parse_parameters(buffer, table);
-  int return_type = parse_return_type(buffer, table);
-  ast_list_t *stmts = parse_function_body(buffer, table);
+    // Get the fonction key word
+    char func_kw[] = "fonction ";
+    for (int idx = 0; idx < 9; idx += 1) {
+        if (func_kw[idx] == buf_getchar(buffer)) {
+            continue;
+        } else {
+            exit(1);
+        }
+    }
 
-  return ast_new_function(name, return_type, params, stmts);
+    // Get the function name (not realy good solution)
+    // Find the size of the function name
+    int func_name_size = 0;
+    char chr = '?';
+    while (chr != ' ' && chr != '(') {
+        func_name_size += 1;
+        chr = buf_getchar(buffer);
+    }
+    buf_rollback(buffer, func_name_size);
+
+    // Register the function name
+    char func_name[func_name_size];
+    for (int idx = 0; idx < func_name_size; idx += 1) {
+        func_name[idx] = buf_getchar(buffer);
+    }
+
+    // ast_list_t *params = parse_parameters(buffer);
+    // int return_type = parse_return_type(buffer);
+    // ast_list_t *stmts = parse_function_body(buffer);
+
+    // return ast_new_function(name, return_type, params, stmts);
+    return NULL;
 }
 
 /**
@@ -269,6 +286,7 @@ ast_t *parse_function(buffer_t *buffer, symbol_t **table)
  */
 ast_list_t *parse(buffer_t *buffer)
 {
+<<<<<<< HEAD
   symbol_t *table = NULL;
   ast_t *function = parse_function(buffer, &table);
   ast_print(function);
@@ -276,4 +294,11 @@ ast_list_t *parse(buffer_t *buffer)
   if (DEBUG)
     printf("** end of file. **\n");
   return NULL;
+=======
+    ast_t *function = parse_function(buffer);
+    ast_print(function);
+
+    if (DEBUG) printf("** end of file. **\n");
+    return NULL;
+>>>>>>> 93cdbcb31a617aaec3fd79efbfe39ac3eb38b9e6
 }
