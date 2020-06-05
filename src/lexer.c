@@ -26,6 +26,30 @@ bool isalphanum (char chr)
   // faire le reste
   return false;
 }
+
+bool isOperator (char chr)
+{
+  if (chr == '-' ||
+      chr == '+' ||
+      chr == '/' ||
+      chr == '*' ||
+      chr == 'E' ||
+      chr == 'O' ||
+      chr == '<' ||
+      chr == '<' ||
+      chr == '>' ||
+      chr == '>' ||
+      chr == '=' ||
+      chr == 'T' ||
+      chr == 'U' ||
+      chr == '!'
+    ) {
+     return true;
+  }
+  // faire le reste
+  return false;
+}
+
 void lexer_assert_openbracket (buffer_t *buffer, char *msg)
 {
   char next = buf_getchar(buffer);
@@ -60,15 +84,15 @@ void lexer_assert_twopoints (buffer_t *buffer, char *msg)
  * Notre objectif est de lire le maximum de caractères
  * tant que ceux-ci correspondent aux possibilités suivantes:
  *  * a-z
- *  * A-Z 
+ *  * A-Z
  *  * 0-9
  *  * _
  * Lorsqu'on a trouvé une suite de caractères qui matchent
  * allouer de la mémoire (malloc) et copier ces caractères dedans
  * retourner l'espace alloué
- * 
+ *
  * Attention: si aucun caractère ne matchait, retourner NULL
- * 
+ *
  */
 char *lexer_getalphanum (buffer_t *buffer)
 {
@@ -103,7 +127,7 @@ char *lexer_getalphanum (buffer_t *buffer)
   char *out = malloc(sizeof(char) * count);
   save[count - 1] = '\0';
   strncpy(out, save, count);
-  
+
   return out;
 }
 
@@ -128,7 +152,7 @@ char *lexer_getalphanum_rollback (buffer_t *buffer)
   char *out = malloc(sizeof(char) * count);
   save[count - 1] = '\0';
   strncpy(out, save, count);
-  
+
   return out;
 }
 
@@ -152,6 +176,6 @@ long lexer_getnumber (buffer_t *buffer)
 
   save[count - 1] = '\0';
   long out = strtol(save, NULL, 10);
-  
+
   return out;
 }

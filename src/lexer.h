@@ -4,6 +4,7 @@
 #include "buffer.h"
 
 #define LEXEM_SIZE 60
+#define LEXEM_OP_SIZE 2
 
 bool isalphanum (char chr);
 bool isnbr (char chr);
